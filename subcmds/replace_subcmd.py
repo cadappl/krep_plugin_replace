@@ -17,14 +17,14 @@ purposed formats."""
   def options(self, optparse):
     SubCommand.options(self, optparse)
 
-    options = optparse.add_option_group('File options')
+    options = optparse.add_option_group('Pattern options')
     options.add_option(
       '--group',
       dest='group', action='store',
       help='The set name in value-set file')
     options.add_option(
       '--from',
-      dest='fr', action='store',
+      dest='fr', action='store', metavar="FROM",
       help='The referred "from" attr in referred elements')
     options.add_option(
       '--to',
@@ -55,7 +55,7 @@ purposed formats."""
     RaiseExceptionIfOptionMissed(
       options.group, 'group referred in XML file is undefined')
     RaiseExceptionIfOptionMissed(
-      not (options.output and len(args)), "output works only for one file")
+      not (options.output and len(args) != 1), "output works only for one file")
 
     valueset = XmlConfigFile(options.xml_file)
     for name in args:
@@ -79,7 +79,7 @@ purposed formats."""
         oname = name
       else:
         if options.output:
-          oname = output
+          oname = options.output
         else:
           oname = name
 
