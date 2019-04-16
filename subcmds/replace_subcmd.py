@@ -19,6 +19,10 @@ purposed formats."""
 
     options = optparse.add_option_group('Pattern options')
     options.add_option(
+      '--simple-substitute',
+      dest='simple_subst', action='store_true',
+      help='Define to use simple variable in option "from" and "to"')
+    options.add_option(
       '--group',
       dest='group', action='store',
       help='The set name in value-set file')
@@ -69,9 +73,14 @@ purposed formats."""
 
       substitue = context
       for var in valueset.foreach(options.group):
-        if var.get(options.fr) and var.get(options.to):
-          vfr = var.get(options.fr)
-          vto = var.get(options.to)
+        if options.simple_subst:
+          if var.get(options.fr) and var.get(options.to):
+            vfr = var.get(options.fr)
+            vto = var.get(options.to)
+            substitue = substitue.replace(vfr, vto)
+        else:
+          vfr = var.escape_attr(options.fr)
+          vto = var.escape_attr(options.to)
           substitue = substitue.replace(vfr, vto)
 
       oname = ''
