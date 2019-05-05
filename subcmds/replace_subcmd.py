@@ -79,9 +79,10 @@ purposed formats."""
             vto = var.get(options.to)
             substitue = substitue.replace(vfr, vto)
         else:
-          vfr = var.escape_attr(options.fr)
-          vto = var.escape_attr(options.to)
-          substitue = substitue.replace(vfr, vto)
+          vfr, ra = valueset.escape_attr(options.fr, var)
+          vto, rb = valueset.escape_attr(options.to, var)
+          if ra and rb:
+            substitue = substitue.replace(vfr, vto)
 
       oname = ''
       if options.inplace:
