@@ -67,8 +67,9 @@ purposed formats."""
 
     RaiseExceptionIfOptionMissed(
       options.group, 'group referred in XML file is undefined')
+    RaiseExceptionIfOptionMissed(
+      args, 'No files to substitue')
 
-    valueset = XmlConfigFile(options.xml_file)
     for name in args:
       if not os.path.exists(name):
         print('Error: %s not existed' % name)
