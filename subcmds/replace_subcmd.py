@@ -57,9 +57,16 @@ purposed formats."""
     RaiseExceptionIfOptionMissed(
       options.xml_file, 'XML file isn\'t defined')
     RaiseExceptionIfOptionMissed(
-      options.group, 'group referred in XML file is undefined')
-    RaiseExceptionIfOptionMissed(
       not (options.output and len(args) != 1), "output works only for one file")
+
+    valueset = XmlConfigFile(options.xml_file)
+    if not options.group:
+      sets = valueset.value_sets()
+      if len(sets) == 1:
+        options.group = sets.keys()[0]
+
+    RaiseExceptionIfOptionMissed(
+      options.group, 'group referred in XML file is undefined')
 
     valueset = XmlConfigFile(options.xml_file)
     for name in args:
