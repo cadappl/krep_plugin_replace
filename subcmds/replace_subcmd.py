@@ -1,8 +1,25 @@
 
+import contextlib
 import os
+import sys
 
 from topics import KrepXmlConfigFile, RaiseExceptionIfOptionMissed, \
   SubCommand, XmlConfigFile
+
+
+@contextlib.contextmanager
+def _open(output, mode):
+  if output == '-':
+    fp = sys.stdout
+  else:
+    fp = open(output, mode)
+
+  try:
+    yield fp
+  finally:
+    if fp is not sys.stdout:
+      fp.close()
+
 
 class ReplaceSubcmd(SubCommand):
   COMMAND = 'replace'
@@ -92,19 +109,17 @@ purposed formats."""
           if ra and rb:
             substitue = substitue.replace(vfr, vto)
 
-      oname = ''
+      oname = '-'
       if options.inplace:
         oname = name
       else:
         if options.output:
           oname = options.output
-        else:
-          oname = name
 
         if options.postfix:
           oname += options.postfix
 
-      with open(oname, 'w') as fp:
+      with _open(oname, 'w') as fp:
         fp.write(substitue)
 
     return True
